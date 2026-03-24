@@ -16,11 +16,21 @@ export function Hero() {
       ref={ref}
       className="relative h-screen w-full overflow-hidden flex items-end"
     >
-      {/* Video / Image Background placeholder */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-background z-10" />
-      <div className="absolute inset-0 bg-[hsl(0,0%,6%)]">
-        {/* Video will go here — for now a gradient placeholder */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(0,0%,8%)] via-[hsl(0,0%,5%)] to-[hsl(0,0%,3%)]" />
+      {/* Video Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-background z-10" />
+      {/* Left text readability gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10" />
+      <div className="absolute inset-0 bg-[hsl(0,0%,4%)]">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+          poster="/hero/hero-1.webp"
+        >
+          <source src="/hero/hero-video.mp4" type="video/mp4" />
+        </video>
       </div>
 
       {/* Jeweler's Light — cursor glow */}
@@ -55,7 +65,7 @@ export function Hero() {
 
         {/* Headline */}
         <h1
-          className={`mt-4 md:mt-6 text-4xl md:text-6xl lg:text-7xl font-medium leading-[1.1] max-w-3xl transition-all duration-1000 delay-500 ${
+          className={`mt-4 md:mt-6 text-4xl md:text-6xl lg:text-7xl font-medium leading-[1.1] max-w-xl md:max-w-2xl transition-all duration-1000 delay-500 ${
             loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
           style={{ transitionTimingFunction: 'var(--brand-easing)' }}
