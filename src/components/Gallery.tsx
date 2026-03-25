@@ -1,67 +1,70 @@
 import { ScrollReveal } from './ScrollReveal';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const galleryItems = [
   {
-    title: 'Кольца',
-    subtitle: 'New Collection 2026',
+    titleKey: 'gallery.rings',
+    subtitleKey: 'gallery.rings.sub',
     imageWhite: '/gallery/rings-white.webp',
     imageModel: '/gallery/rings-model.webp',
   },
   {
-    title: 'Серьги',
-    subtitle: 'Бриллиантовый блеск',
+    titleKey: 'gallery.earrings',
+    subtitleKey: 'gallery.earrings.sub',
     imageWhite: '/gallery/earrings-white.webp',
     imageModel: '/gallery/earrings-model.webp',
   },
   {
-    title: 'Подвески',
-    subtitle: 'Утончённый акцент',
+    titleKey: 'gallery.pendants',
+    subtitleKey: 'gallery.pendants.sub',
     imageWhite: '/gallery/pendants-white.webp',
     imageModel: '/gallery/pendants-model.webp',
   },
   {
-    title: 'Комплекты',
-    subtitle: 'Идеальная гармония',
+    titleKey: 'gallery.sets',
+    subtitleKey: 'gallery.sets.sub',
     imageWhite: '/gallery/sets-white.webp',
     imageModel: '/gallery/sets-model.webp',
   },
   {
-    title: 'Браслеты',
-    subtitle: 'Элегантность',
+    titleKey: 'gallery.bracelets',
+    subtitleKey: 'gallery.bracelets.sub',
     imageWhite: '/gallery/bracelets-white.webp',
     imageModel: '/gallery/bracelets-model.webp',
   },
   {
-    title: 'Колье',
-    subtitle: 'Роскошь и стиль',
+    titleKey: 'gallery.necklaces',
+    subtitleKey: 'gallery.necklaces.sub',
     imageWhite: '/gallery/necklaces-white.webp',
     imageModel: '/gallery/necklaces-model.webp',
   },
 ];
 
 export function Gallery() {
+  const { t } = useLanguage();
+
   return (
     <section id="gallery" className="py-20 md:py-32 px-6 md:px-10 border-t border-border">
       <div className="max-w-7xl mx-auto">
         <ScrollReveal>
           <div className="text-center mb-16 md:mb-20">
             <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
-              Витрина
+              {t('gallery.overline')}
             </span>
             <h2 className="mt-4 text-3xl md:text-5xl font-medium">
-              Галерея
+              {t('gallery.title')}
             </h2>
           </div>
         </ScrollReveal>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           {galleryItems.map((item, i) => (
-            <ScrollReveal key={item.title} delay={i * 100}>
+            <ScrollReveal key={item.titleKey} delay={i * 100}>
               <div className="group relative overflow-hidden aspect-[3/4] cursor-pointer">
                 {/* Layer 1: Model image (underneath, revealed on hover) */}
                 <img
                   src={item.imageModel}
-                  alt={`${item.title} на модели`}
+                  alt={t(item.titleKey)}
                   loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover scale-110"
                 />
@@ -73,7 +76,7 @@ export function Gallery() {
                 >
                   <img
                     src={item.imageWhite}
-                    alt={item.title}
+                    alt={t(item.titleKey)}
                     loading="lazy"
                     className="w-full h-full object-cover"
                   />
@@ -91,13 +94,13 @@ export function Gallery() {
                     className="text-[10px] md:text-xs tracking-[0.2em] uppercase transition-all duration-700 text-neutral-400 group-hover:text-neutral-300"
                     style={{ transitionTimingFunction: 'var(--brand-easing)' }}
                   >
-                    {item.subtitle}
+                    {t(item.subtitleKey)}
                   </p>
                   <h3
                     className="mt-1 text-base md:text-xl font-medium font-['Playfair_Display',serif] transition-colors duration-700 text-neutral-800 group-hover:text-white"
                     style={{ transitionTimingFunction: 'var(--brand-easing)' }}
                   >
-                    {item.title}
+                    {t(item.titleKey)}
                   </h3>
                 </div>
 

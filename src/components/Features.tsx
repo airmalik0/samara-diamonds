@@ -1,40 +1,40 @@
 import { ScrollReveal } from './ScrollReveal';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const features = [
   {
-    title: 'Бриллианты мирового класса',
-    description:
-      'Только сертифицированные камни высочайшего качества. Каждый бриллиант проходит строгий отбор — безупречная огранка, чистота и сияние, которое невозможно не заметить.',
+    titleKey: 'features.diamonds.title',
+    descKey: 'features.diamonds.desc',
     image: '/gallery/feature-diamonds.webp',
     imageAlt: 'Бриллианты крупным планом',
   },
   {
-    title: '750+ изделий в наличии',
-    description:
-      'Белое и жёлтое золото 750 пробы. Кольца, серьги, подвески, браслеты, колье — всё в наличии и готово стать вашим. Без ожидания, без предзаказа.',
+    titleKey: 'features.gold.title',
+    descKey: 'features.gold.desc',
     image: '/gallery/feature-gold.webp',
     imageAlt: 'Ювелирные изделия из белого золота',
   },
   {
-    title: 'Лучшие цены',
-    description:
-      'Прямые поставки из Италии без посредников. Эксклюзивные модели по справедливой цене — роскошь, которая доступна.',
+    titleKey: 'features.price.title',
+    descKey: 'features.price.desc',
     image: '/gallery/feature-price.webp',
     imageAlt: 'Кольцо с бриллиантом',
   },
 ];
 
 export function Features() {
+  const { t } = useLanguage();
+
   return (
     <section id="about" className="py-20 md:py-32 border-t border-border">
       <ScrollReveal>
         <div className="text-center mb-16 md:mb-24 px-6">
           <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
-            Почему мы
+            {t('features.overline')}
           </span>
           <h2 className="mt-4 text-4xl md:text-6xl lg:text-7xl font-medium">
-            Три причины{' '}
-            <em className="font-normal italic text-muted-foreground">выбрать нас</em>
+            {t('features.title1')}{' '}
+            <em className="font-normal italic text-muted-foreground">{t('features.title2')}</em>
           </h2>
         </div>
       </ScrollReveal>
@@ -44,7 +44,7 @@ export function Features() {
           const imageRight = i % 2 === 0;
 
           return (
-            <ScrollReveal key={feat.title}>
+            <ScrollReveal key={feat.titleKey}>
               <div
                 className={`flex flex-col ${
                   imageRight ? 'md:flex-row' : 'md:flex-row-reverse'
@@ -56,10 +56,10 @@ export function Features() {
                     className={`max-w-md ${imageRight ? 'md:ml-auto' : 'md:mr-auto'}`}
                   >
                     <h3 className="text-3xl md:text-4xl lg:text-5xl italic font-medium font-['Playfair_Display',serif] leading-[1.15] text-foreground">
-                      {feat.title}
+                      {t(feat.titleKey)}
                     </h3>
                     <p className="mt-5 text-sm md:text-base text-muted-foreground font-light leading-relaxed">
-                      {feat.description}
+                      {t(feat.descKey)}
                     </p>
                   </div>
                 </div>

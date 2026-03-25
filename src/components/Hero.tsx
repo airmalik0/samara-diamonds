@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useMouseGlow } from '@/hooks/useMouseGlow';
+import { useLanguage } from '@/hooks/useLanguage';
 import { ChevronDown } from 'lucide-react';
 
 export function Hero() {
   const { ref, position, isTouch } = useMouseGlow();
+  const { t } = useLanguage();
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -59,7 +61,7 @@ export function Hero() {
           style={{ transitionTimingFunction: 'var(--brand-easing)' }}
         >
           <span className="text-xs md:text-sm tracking-[0.3em] uppercase text-muted-foreground">
-            Tashkent City Mall
+            {t('hero.overline')}
           </span>
         </div>
 
@@ -70,11 +72,11 @@ export function Hero() {
           }`}
           style={{ transitionTimingFunction: 'var(--brand-easing)' }}
         >
-          Бриллианты,{' '}
+          {t('hero.headline1')}{' '}
           <em className="font-normal italic text-primary/70">
-            достойные
+            {t('hero.headline2')}
           </em>{' '}
-          каждой.
+          {t('hero.headline3')}
         </h1>
 
         {/* Subtitle */}
@@ -84,7 +86,7 @@ export function Hero() {
           }`}
           style={{ transitionTimingFunction: 'var(--brand-easing)' }}
         >
-          750+ изделий из белого золота с бриллиантами мирового класса. Всё в наличии, всё сразу.
+          {t('hero.subtitle')}
         </p>
 
         {/* CTA */}
@@ -99,14 +101,14 @@ export function Hero() {
             className="inline-flex items-center justify-center px-8 py-3.5 bg-primary text-primary-foreground text-sm tracking-[0.15em] uppercase hover:bg-primary/90 transition-all duration-500"
             style={{ transitionTimingFunction: 'var(--brand-easing)' }}
           >
-            Посетить бутик
+            {t('hero.cta.visit')}
           </a>
           <a
             href="tel:+998935557555"
             className="inline-flex items-center justify-center px-8 py-3.5 border border-primary/30 text-sm tracking-[0.15em] uppercase text-primary hover:border-primary/60 transition-all duration-500"
             style={{ transitionTimingFunction: 'var(--brand-easing)' }}
           >
-            Позвонить
+            {t('hero.cta.call')}
           </a>
         </div>
       </div>

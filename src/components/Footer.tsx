@@ -1,4 +1,8 @@
+import { useLanguage } from '@/hooks/useLanguage';
+
 export function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="border-t border-border py-10 md:py-14 px-6 md:px-10">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
@@ -40,7 +44,7 @@ export function Footer() {
 
         {/* Copyright */}
         <p className="text-xs text-muted-foreground/50 font-light">
-          &copy; 2026 SAMAR DIAMONDS
+          {t('footer.copyright')}
         </p>
       </div>
     </footer>

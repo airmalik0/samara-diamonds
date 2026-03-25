@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
-const navLinks = [
-  { label: 'Коллекции', href: '#collections' },
-  { label: 'О нас', href: '#about' },
-  { label: 'Галерея', href: '#gallery' },
-  { label: 'Контакты', href: '#visit' },
+const navKeys = [
+  { key: 'nav.collections', href: '#collections' },
+  { key: 'nav.about', href: '#about' },
+  { key: 'nav.gallery', href: '#gallery' },
+  { key: 'nav.contacts', href: '#visit' },
 ];
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { lang, toggle, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -40,35 +42,51 @@ export function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-          {navLinks.map((link) => (
+          {navKeys.map((link) => (
             <a
               key={link.href}
               href={link.href}
               className="text-sm tracking-[0.1em] xl:tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-500 whitespace-nowrap"
               style={{ transitionTimingFunction: 'var(--brand-easing)' }}
             >
-              {link.label}
+              {t(link.key)}
             </a>
           ))}
         </nav>
 
-        {/* Desktop Phone */}
-        <a
-          href="tel:+998935557555"
-          className="hidden lg:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-500 shrink-0"
-        >
-          <Phone size={14} />
-          <span className="tracking-wider whitespace-nowrap">+998 93 555 75 55</span>
-        </a>
+        {/* Desktop: Lang + Phone */}
+        <div className="hidden lg:flex items-center gap-4 shrink-0">
+          <button
+            onClick={toggle}
+            className="text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-500 border border-border px-2.5 py-1"
+          >
+            {lang === 'ru' ? 'UZ' : 'RU'}
+          </button>
+          <a
+            href="tel:+998935557555"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-500"
+          >
+            <Phone size={14} />
+            <span className="tracking-wider whitespace-nowrap">+998 93 555 75 55</span>
+          </a>
+        </div>
 
         {/* Mobile/Tablet Menu Toggle */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="lg:hidden p-2 text-foreground"
-          aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'}
-        >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="lg:hidden flex items-center gap-3">
+          <button
+            onClick={toggle}
+            className="text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors border border-border px-2 py-1"
+          >
+            {lang === 'ru' ? 'UZ' : 'RU'}
+          </button>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-2 text-foreground"
+            aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -83,14 +101,14 @@ export function Header() {
         }}
       >
         <nav className="flex flex-col px-6 pb-6 pt-2 gap-4">
-          {navLinks.map((link) => (
+          {navKeys.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
               className="text-sm tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
             >
-              {link.label}
+              {t(link.key)}
             </a>
           ))}
           <a

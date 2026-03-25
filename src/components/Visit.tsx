@@ -1,17 +1,20 @@
 import { ScrollReveal } from './ScrollReveal';
+import { useLanguage } from '@/hooks/useLanguage';
 import { MapPin, Clock, Phone, Instagram } from 'lucide-react';
 
 export function Visit() {
+  const { t } = useLanguage();
+
   return (
     <section id="visit" className="py-20 md:py-32 px-6 md:px-10 border-t border-border">
       <div className="max-w-7xl mx-auto">
         <ScrollReveal>
           <div className="text-center mb-16 md:mb-20">
             <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
-              Ждём вас
+              {t('visit.overline')}
             </span>
             <h2 className="mt-4 text-3xl md:text-5xl font-medium">
-              Посетите <em className="font-normal italic text-primary/70">бутик</em>
+              {t('visit.title1')} <em className="font-normal italic text-primary/70">{t('visit.title2')}</em>
             </h2>
           </div>
         </ScrollReveal>
@@ -26,12 +29,12 @@ export function Visit() {
                 </div>
                 <div>
                   <h3 className="text-sm tracking-[0.15em] uppercase font-medium font-['Inter',sans-serif]">
-                    Адрес
+                    {t('visit.address.label')}
                   </h3>
                   <p className="mt-2 text-muted-foreground font-light">
-                    Tashkent City Mall, 1 этаж
+                    {t('visit.address.line1')}
                     <br />
-                    г. Ташкент, ул. Ботир Закиров, 7
+                    {t('visit.address.line2')}
                   </p>
                 </div>
               </div>
@@ -44,12 +47,12 @@ export function Visit() {
                 </div>
                 <div>
                   <h3 className="text-sm tracking-[0.15em] uppercase font-medium font-['Inter',sans-serif]">
-                    Часы работы
+                    {t('visit.hours.label')}
                   </h3>
                   <p className="mt-2 text-muted-foreground font-light">
-                    Пн — Чт: 10:00 — 23:00
+                    {t('visit.hours.weekday')}
                     <br />
-                    Пт — Вс: 10:00 — 00:00
+                    {t('visit.hours.weekend')}
                   </p>
                 </div>
               </div>
@@ -62,7 +65,7 @@ export function Visit() {
                 </div>
                 <div>
                   <h3 className="text-sm tracking-[0.15em] uppercase font-medium font-['Inter',sans-serif]">
-                    Телефон
+                    {t('visit.phone.label')}
                   </h3>
                   <a
                     href="tel:+998935557555"
@@ -82,7 +85,7 @@ export function Visit() {
                 </div>
                 <div>
                   <h3 className="text-sm tracking-[0.15em] uppercase font-medium font-['Inter',sans-serif]">
-                    Социальные сети
+                    {t('visit.social.label')}
                   </h3>
                   <div className="mt-2 flex flex-col gap-1">
                     <a
@@ -115,7 +118,7 @@ export function Visit() {
                 Tashkent City Mall
               </h3>
               <p className="mt-3 text-sm text-muted-foreground font-light">
-                1 этаж, бутик SAMAR Italy
+                {t('visit.map.subtitle')}
               </p>
               <a
                 href="https://www.tcmall.uz/en/scheme?location=s151"
@@ -124,7 +127,7 @@ export function Visit() {
                 className="mt-8 inline-flex items-center justify-center px-8 py-3 border border-primary/30 text-sm tracking-[0.15em] uppercase text-primary hover:border-primary/60 transition-all duration-500"
                 style={{ transitionTimingFunction: 'var(--brand-easing)' }}
               >
-                Показать на карте
+                {t('visit.map.button')}
               </a>
             </div>
           </ScrollReveal>

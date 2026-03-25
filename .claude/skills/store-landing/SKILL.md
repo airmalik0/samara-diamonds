@@ -13,6 +13,19 @@ Act as a Senior Creative Technologist who builds cinematic landing pages for phy
 
 ---
 
+## PHASE 0: API KEY — "No Key, No Images"
+
+Before starting any work, check if the user has provided a **Google AI API key** (for Gemini / Imagen image generation).
+
+- If the key is available (e.g., provided in the conversation or stored in env), proceed.
+- If NOT available, **ask the user immediately:**
+  > "Для генерации фотографий мне нужен Google AI API ключ (Gemini). Без него я смогу только поставить placeholder-заглушки вместо реальных фото. Пожалуйста, предоставьте ключ, если хотите сгенерированные изображения."
+- **Do NOT silently place placeholders.** Always inform the user that images will be placeholders if no API key is provided.
+- Use the key with `generativelanguage.googleapis.com` API for all image generation (gallery products, feature photos, hero portraits).
+- When generating model photos for the gallery, **send the product image as reference** in the same request so the jewelry matches between default and hover states.
+
+---
+
 ## PHASE 1: RESEARCH — "Know the Brand Before You Touch the Code"
 
 ### 1A. Gather Sources
@@ -187,7 +200,7 @@ src/
 │   ├── Header.tsx             — Fixed, fully transparent at top → solid/blur on scroll (never covers Hero video)
 │   ├── Hero.tsx               — Full viewport, generated video background, atmospheric entrance
 │   ├── BrandsMarquee.tsx      — If brand carries other brands
-│   ├── Features.tsx           — Value proposition cards
+│   ├── Features.tsx           — Alternating full-width text+image blocks (see Features rules)
 │   ├── Gallery.tsx            — Image grid with reveal animations
 │   ├── Visit.tsx              — Location, hours, contact (for physical stores)
 │   └── Footer.tsx             — Minimal, branded
@@ -203,11 +216,55 @@ Not all sections are required — pick what serves the brand:
 - [ ] **Header** — Logo, nav, contact info. Fixed, **transparent at top → solid on scroll** (must not cover Hero video).
 - [ ] **Hero** — Full viewport. **Generated video background.** Headline with drama font. CTA.
 - [ ] **Social Proof / Brands** — Marquee or logo grid if applicable.
-- [ ] **Value Props** — 3 cards with the extracted propositions.
+- [ ] **Value Props / Features** — Alternating full-width blocks. See Features section rules below.
 - [ ] **Gallery / Showcase** — Product imagery generated via Nano Banana API (latest version). See Gallery rules below.
 - [ ] **About / Story** — If the brand has a compelling story.
 - [ ] **Visit / Contact** — Address, hours, phone, map, Instagram. Essential for physical stores.
 - [ ] **Footer** — Brand name, links, contact, copyright.
+
+### Features / Value Props Section Rules
+
+**Layout: alternating full-width horizontal blocks, NOT cards or grids.**
+
+Each value proposition occupies a full-width row with two halves — text and a large cinematic photo:
+
+- **Block 1:** text LEFT, image RIGHT
+- **Block 2:** text RIGHT, image LEFT
+- **Block 3:** text LEFT, image RIGHT
+
+#### Text side
+- Large italic serif heading (the drama/display font from the design system, e.g. Playfair Display italic). White color, big — `text-3xl md:text-4xl lg:text-5xl`.
+- Short description paragraph below in muted foreground, `font-light`.
+- **No icons, no boxes, no decorative elements** — just clean typography.
+- Text block constrained with `max-w-md` and pushed toward the image side (`ml-auto` or `mr-auto` depending on layout direction).
+
+#### Image side
+- Full-height product/lifestyle photo that bleeds to the viewport edge.
+- **Photos MUST have dark/black backgrounds** so they blend seamlessly with the site. No light backgrounds, no lifestyle shots with bright environments.
+- The image must dissolve into the site background using **gradient overlays on 3 edges:**
+  - **Top edge:** `h-32 md:h-40` gradient from `background` color → transparent
+  - **Bottom edge:** `h-32 md:h-40` gradient from `background` color → transparent
+  - **Inner edge** (side facing text): `w-40 md:w-64` gradient from `background` color → transparent
+  - **Outer edge** (viewport edge): NO fade — image bleeds off-screen
+- The fade gradients must be generous so the photo dissolves naturally into the dark background, not hard-cut.
+
+#### Image generation
+- Generate images using the AI image API (Gemini / Imagen).
+- Prompts must explicitly request **dark/black backgrounds** and match the site's color palette.
+- Subject matter should relate to the value proposition (e.g., diamonds close-up for "world-class diamonds", jewelry collection for "750+ items").
+
+#### Section header
+- Small uppercase label (e.g., "ПОЧЕМУ МЫ") in muted foreground with wide letter-spacing.
+- Large heading with the italic drama font for emphasis on a key phrase, that phrase in `text-muted-foreground` to create contrast.
+
+#### Responsive
+- Mobile: stack vertically — image on top (full width, `h-[300px]`), text below.
+- Desktop: side-by-side 50/50 split, `md:flex-row` / `md:flex-row-reverse` for alternation.
+- Min height `md:min-h-[500px]` on desktop for cinematic proportions.
+
+#### Animation
+- Each block wrapped in `ScrollReveal` for scroll-triggered entrance.
+- No hover animations needed — the section relies on scroll reveal and the visual weight of the photos.
 
 ### Gallery / Showcase Rules
 
