@@ -8,15 +8,6 @@ import { ImageUpload } from './ImageUpload';
 import { toast } from 'sonner';
 import { Save, Loader2 } from 'lucide-react';
 
-const SLUG_LABELS: Record<string, string> = {
-  rings: 'Кольца',
-  earrings: 'Серьги',
-  pendants: 'Подвески',
-  sets: 'Комплекты',
-  bracelets: 'Браслеты',
-  necklaces: 'Колье',
-};
-
 function CardForm({ item }: { item: GalleryItem }) {
   const queryClient = useQueryClient();
   const [subtitleRu, setSubtitleRu] = useState(item.subtitle_ru);
@@ -49,7 +40,7 @@ function CardForm({ item }: { item: GalleryItem }) {
     if (error) {
       toast.error('Ошибка сохранения: ' + error.message);
     } else {
-      toast.success(`${SLUG_LABELS[item.slug] || item.slug} сохранено`);
+      toast.success(`Карточка ${item.sort_order} сохранена`);
       queryClient.invalidateQueries({ queryKey: ['gallery-items'] });
     }
   };
@@ -64,7 +55,7 @@ function CardForm({ item }: { item: GalleryItem }) {
     <div className="border border-border rounded-lg p-4 space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="font-medium">
-          {item.sort_order}. {SLUG_LABELS[item.slug] || item.slug}
+          Карточка {item.sort_order}
         </h3>
         <Button size="sm" onClick={handleSave} disabled={saving || !hasChanges}>
           {saving ? <Loader2 size={14} className="animate-spin mr-2" /> : <Save size={14} className="mr-2" />}
