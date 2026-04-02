@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useContacts } from '@/hooks/useContacts';
 
 const navKeys = [
   { key: 'nav.collections', href: '#collections' },
@@ -13,6 +14,9 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { lang, toggle, t } = useLanguage();
+  const { data: contacts } = useContacts();
+  const phone = contacts?.phone || '+998935557555';
+  const phoneDisplay = phone.replace(/(\+998)(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -63,11 +67,11 @@ export function Header() {
             {lang === 'ru' ? 'UZ' : 'RU'}
           </button>
           <a
-            href="tel:+998935557555"
+            href={`tel:${phone}`}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-500"
           >
             <Phone size={14} />
-            <span className="tracking-wider whitespace-nowrap">+998 93 555 75 55</span>
+            <span className="tracking-wider whitespace-nowrap">{phoneDisplay}</span>
           </a>
         </div>
 
@@ -112,11 +116,11 @@ export function Header() {
             </a>
           ))}
           <a
-            href="tel:+998935557555"
+            href={`tel:${phone}`}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mt-2"
           >
             <Phone size={14} />
-            <span className="tracking-wider">+998 93 555 75 55</span>
+            <span className="tracking-wider">{phoneDisplay}</span>
           </a>
         </nav>
       </div>

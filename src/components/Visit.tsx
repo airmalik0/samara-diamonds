@@ -1,9 +1,15 @@
 import { ScrollReveal } from './ScrollReveal';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useContacts } from '@/hooks/useContacts';
 import { MapPin, Clock, Phone, Instagram } from 'lucide-react';
 
 export function Visit() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: c } = useContacts();
+
+  if (!c) return null;
+
+  const l = <T,>(ru: T, uz: T) => (lang === 'ru' ? ru : uz);
 
   return (
     <section id="visit" className="py-20 md:py-32 px-6 md:px-10 border-t border-border">
@@ -32,9 +38,9 @@ export function Visit() {
                     {t('visit.address.label')}
                   </h3>
                   <p className="mt-2 text-muted-foreground font-light">
-                    {t('visit.address.line1')}
+                    {l(c.address_ru, c.address_uz)}
                     <br />
-                    {t('visit.address.line2')}
+                    {l(c.address_line2_ru, c.address_line2_uz)}
                   </p>
                 </div>
               </div>
@@ -50,9 +56,9 @@ export function Visit() {
                     {t('visit.hours.label')}
                   </h3>
                   <p className="mt-2 text-muted-foreground font-light">
-                    {t('visit.hours.weekday')}
+                    {l(c.hours_weekday_ru, c.hours_weekday_uz)}
                     <br />
-                    {t('visit.hours.weekend')}
+                    {l(c.hours_weekend_ru, c.hours_weekend_uz)}
                   </p>
                 </div>
               </div>
@@ -68,12 +74,12 @@ export function Visit() {
                     {t('visit.phone.label')}
                   </h3>
                   <a
-                    href="tel:+998935557555"
+                    href={`tel:${c.phone}`}
                     className="mt-2 block text-muted-foreground hover:text-foreground font-light transition-colors duration-500"
                   >
-                    +998 93 555 75 55
+                    {c.phone.replace(/(\+998)(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')}
                   </a>
-                  <p className="text-sm text-muted-foreground/60 mt-1">Sara</p>
+                  <p className="text-sm text-muted-foreground/60 mt-1">{c.contact_name}</p>
                 </div>
               </div>
             </ScrollReveal>
@@ -89,20 +95,20 @@ export function Visit() {
                   </h3>
                   <div className="mt-2 flex flex-col gap-1">
                     <a
-                      href="https://www.instagram.com/samardiamonds/"
+                      href={c.instagram_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-foreground font-light transition-colors duration-500"
                     >
-                      @samardiamonds
+                      {c.instagram_handle}
                     </a>
                     <a
-                      href="https://t.me/samar_diamonds"
+                      href={c.telegram_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-foreground font-light transition-colors duration-500"
                     >
-                      Telegram
+                      {c.telegram_label}
                     </a>
                   </div>
                 </div>
@@ -118,10 +124,10 @@ export function Visit() {
                 Tashkent City Mall
               </h3>
               <p className="mt-3 text-sm text-muted-foreground font-light">
-                {t('visit.map.subtitle')}
+                {l(c.map_subtitle_ru, c.map_subtitle_uz)}
               </p>
               <a
-                href="https://www.tcmall.uz/en/scheme?location=s151"
+                href={c.map_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-8 inline-flex items-center justify-center px-8 py-3 border border-primary/30 text-sm tracking-[0.15em] uppercase text-primary hover:border-primary/60 transition-all duration-500"

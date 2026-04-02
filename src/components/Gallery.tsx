@@ -1,47 +1,10 @@
 import { ScrollReveal } from './ScrollReveal';
 import { useLanguage } from '@/hooks/useLanguage';
-
-const galleryItems = [
-  {
-    titleKey: 'gallery.rings',
-    subtitleKey: 'gallery.rings.sub',
-    imageWhite: '/gallery/rings-white.webp',
-    imageModel: '/gallery/rings-model.webp',
-  },
-  {
-    titleKey: 'gallery.earrings',
-    subtitleKey: 'gallery.earrings.sub',
-    imageWhite: '/gallery/earrings-white.webp',
-    imageModel: '/gallery/earrings-model.webp',
-  },
-  {
-    titleKey: 'gallery.pendants',
-    subtitleKey: 'gallery.pendants.sub',
-    imageWhite: '/gallery/pendants-white.webp',
-    imageModel: '/gallery/pendants-model.webp',
-  },
-  {
-    titleKey: 'gallery.sets',
-    subtitleKey: 'gallery.sets.sub',
-    imageWhite: '/gallery/sets-white.webp',
-    imageModel: '/gallery/sets-model.webp',
-  },
-  {
-    titleKey: 'gallery.bracelets',
-    subtitleKey: 'gallery.bracelets.sub',
-    imageWhite: '/gallery/bracelets-white.webp',
-    imageModel: '/gallery/bracelets-model.webp',
-  },
-  {
-    titleKey: 'gallery.necklaces',
-    subtitleKey: 'gallery.necklaces.sub',
-    imageWhite: '/gallery/necklaces-white.webp',
-    imageModel: '/gallery/necklaces-model.webp',
-  },
-];
+import { useGalleryItems } from '@/hooks/useGalleryItems';
 
 export function Gallery() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: items } = useGalleryItems();
 
   return (
     <section id="gallery" className="py-20 md:py-32 px-6 md:px-10 border-t border-border">
@@ -58,13 +21,13 @@ export function Gallery() {
         </ScrollReveal>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-          {galleryItems.map((item, i) => (
-            <ScrollReveal key={item.titleKey} delay={i * 100}>
+          {items?.map((item, i) => (
+            <ScrollReveal key={item.slug} delay={i * 100}>
               <div className="group relative overflow-hidden aspect-[3/4] cursor-pointer">
                 {/* Layer 1: Model image (underneath, revealed on hover) */}
                 <img
-                  src={item.imageModel}
-                  alt={t(item.titleKey)}
+                  src={item.image_model}
+                  alt={item.slug}
                   loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover scale-110"
                 />
@@ -75,8 +38,8 @@ export function Gallery() {
                   style={{ transitionTimingFunction: 'var(--brand-easing)' }}
                 >
                   <img
-                    src={item.imageWhite}
-                    alt={t(item.titleKey)}
+                    src={item.image_white}
+                    alt={item.slug}
                     loading="lazy"
                     className="w-full h-full object-cover"
                   />
@@ -94,7 +57,7 @@ export function Gallery() {
                     className="text-xs md:text-sm tracking-[0.2em] uppercase transition-all duration-700 text-neutral-400 group-hover:text-neutral-300"
                     style={{ transitionTimingFunction: 'var(--brand-easing)' }}
                   >
-                    {t(item.subtitleKey)}
+                    {lang === 'ru' ? item.subtitle_ru : item.subtitle_uz}
                   </p>
                 </div>
 
