@@ -5,7 +5,6 @@ import { Features } from '@/components/Features';
 import { Gallery } from '@/components/Gallery';
 import { Visit } from '@/components/Visit';
 import { Footer } from '@/components/Footer';
-import { SupabaseTest } from '@/components/SupabaseTest';
 import { LanguageContext, useLanguageProvider } from '@/hooks/useLanguage';
 
 const Index = () => {
@@ -21,7 +20,6 @@ const Index = () => {
         <Gallery />
         <Visit />
         <Footer />
-        <SupabaseTest />
       </div>
     </LanguageContext.Provider>
   );
