@@ -91,17 +91,11 @@ export function Gallery() {
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                   <p
-                    className="text-[10px] md:text-xs tracking-[0.2em] uppercase transition-all duration-700 text-neutral-400 group-hover:text-neutral-300"
+                    className="text-xs md:text-sm tracking-[0.2em] uppercase transition-all duration-700 text-neutral-400 group-hover:text-neutral-300"
                     style={{ transitionTimingFunction: 'var(--brand-easing)' }}
                   >
                     {t(item.subtitleKey)}
                   </p>
-                  <h3
-                    className="mt-1 text-base md:text-xl font-medium font-['Playfair_Display',serif] transition-colors duration-700 text-neutral-800 group-hover:text-white"
-                    style={{ transitionTimingFunction: 'var(--brand-easing)' }}
-                  >
-                    {t(item.titleKey)}
-                  </h3>
                 </div>
 
                 {/* Bottom line */}
