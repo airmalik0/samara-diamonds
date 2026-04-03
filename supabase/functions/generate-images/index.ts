@@ -1,9 +1,6 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { GoogleGenAI } from "npm:@google/genai";
-
 const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY")!;
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 const MODEL = "gemini-3.1-flash-image-preview";
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
 // --- Prompt templates ---
 
@@ -89,22 +86,37 @@ const corsHeaders = {
 };
 
 async function generateImage(prompt: string, imageBase64: string, mimeType: string): Promise<string> {
-  const response = await ai.models.generateContent({
-    model: MODEL,
+  const body = {
     contents: [
-      { text: prompt },
-      { inlineData: { mimeType, data: imageBase64 } },
+      {
+        parts: [
+          { text: prompt },
+          { inlineData: { mimeType, data: imageBase64 } },
+        ],
+      },
     ],
-    config: {
+    generationConfig: {
       responseModalities: ["IMAGE"],
       imageConfig: {
         aspectRatio: "3:4",
         imageSize: "1K",
       },
     },
+  };
+
+  const res = await fetch(GEMINI_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   });
 
-  const parts = response.candidates?.[0]?.content?.parts;
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Gemini ${res.status}: ${err}`);
+  }
+
+  const data = await res.json();
+  const parts = data.candidates?.[0]?.content?.parts;
   if (!parts) throw new Error("No response from Gemini");
 
   for (const part of parts) {
@@ -113,11 +125,10 @@ async function generateImage(prompt: string, imageBase64: string, mimeType: stri
     }
   }
 
-  throw new Error("No image in Gemini response — possibly blocked by safety filters. Try a clearer photo.");
+  throw new Error("No image in Gemini response");
 }
 
 Deno.serve(async (req: Request) => {
-  // CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: corsHeaders });
   }
@@ -125,7 +136,6 @@ Deno.serve(async (req: Request) => {
   try {
     const { image, mimeType, slug } = await req.json();
 
-    // Validate
     if (!image || typeof image !== "string") {
       return new Response(JSON.stringify({ error: "Missing image (base64)" }), {
         status: 400,
@@ -149,7 +159,6 @@ Deno.serve(async (req: Request) => {
     const whitePrompt = `${WHITE_PREFIX} ${suffixes.white}`;
     const modelPrompt = `${MODEL_PREFIX} ${suffixes.model}`;
 
-    // Generate both images in parallel
     const [whiteImage, modelImage] = await Promise.all([
       generateImage(whitePrompt, image, mimeType),
       generateImage(modelPrompt, image, mimeType),
@@ -173,7 +182,7 @@ Deno.serve(async (req: Request) => {
       status = 503;
     } else if (raw.includes("safety") || raw.includes("blocked")) {
       message = "Изображение заблокировано фильтрами безопасности. Попробуйте другое фото.";
-    } else if (raw.includes("No image")) {
+    } else if (raw.includes("No image") || raw.includes("No response")) {
       message = "Не удалось сгенерировать изображение. Попробуйте более чёткое фото.";
     }
 
