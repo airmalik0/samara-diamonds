@@ -5,8 +5,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ImageUpload } from './ImageUpload';
+import { AiImageGenerator } from './AiImageGenerator';
 import { toast } from 'sonner';
-import { Save, Loader2 } from 'lucide-react';
+import { Save, Loader2, Sparkles } from 'lucide-react';
 
 function CardForm({ item }: { item: GalleryItem }) {
   const queryClient = useQueryClient();
@@ -15,6 +16,7 @@ function CardForm({ item }: { item: GalleryItem }) {
   const [imageWhite, setImageWhite] = useState(item.image_white);
   const [imageModel, setImageModel] = useState(item.image_model);
   const [saving, setSaving] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
 
   useEffect(() => {
     setSubtitleRu(item.subtitle_ru);
@@ -57,10 +59,15 @@ function CardForm({ item }: { item: GalleryItem }) {
         <h3 className="font-medium">
           Карточка {item.sort_order}
         </h3>
-        <Button size="sm" onClick={handleSave} disabled={saving || !hasChanges}>
-          {saving ? <Loader2 size={14} className="animate-spin mr-2" /> : <Save size={14} className="mr-2" />}
-          Сохранить
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button size="sm" variant="outline" onClick={() => setAiOpen(true)}>
+            <Sparkles size={14} className="mr-1" /> AI
+          </Button>
+          <Button size="sm" onClick={handleSave} disabled={saving || !hasChanges}>
+            {saving ? <Loader2 size={14} className="animate-spin mr-2" /> : <Save size={14} className="mr-2" />}
+            Сохранить
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -88,6 +95,17 @@ function CardForm({ item }: { item: GalleryItem }) {
           label="Фото (модель)"
         />
       </div>
+
+      <AiImageGenerator
+        slug={item.slug}
+        open={aiOpen}
+        onOpenChange={setAiOpen}
+        onAccept={(whiteUrl, modelUrl) => {
+          setImageWhite(whiteUrl);
+          setImageModel(modelUrl);
+          setAiOpen(false);
+        }}
+      />
     </div>
   );
 }
