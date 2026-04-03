@@ -125,7 +125,11 @@ export function AiImageGenerator({ slug, open, onOpenChange, onAccept }: AiImage
       const data = await res.json();
 
       if (!res.ok || data.error) {
-        throw new Error(data.error || `HTTP ${res.status}`);
+        const raw = data.error || `HTTP ${res.status}`;
+        if (raw.includes('503') || raw.includes('UNAVAILABLE') || raw.includes('high demand')) {
+          throw new Error('Сервер генерации изображений перегружен. Попробуйте через 2–3 минуты.');
+        }
+        throw new Error(raw);
       }
 
       setResults({ white: data.white, model: data.model });

@@ -163,12 +163,24 @@ Deno.serve(async (req: Request) => {
       }
     );
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    console.error("generate-images error:", message);
+    const raw = err instanceof Error ? err.message : String(err);
+    console.error("generate-images error:", raw);
+
+    let message = raw;
+    let status = 502;
+    if (raw.includes("503") || raw.includes("UNAVAILABLE") || raw.includes("high demand")) {
+      message = "Сервер генерации перегружен. Попробуйте через 2–3 минуты.";
+      status = 503;
+    } else if (raw.includes("safety") || raw.includes("blocked")) {
+      message = "Изображение заблокировано фильтрами безопасности. Попробуйте другое фото.";
+    } else if (raw.includes("No image")) {
+      message = "Не удалось сгенерировать изображение. Попробуйте более чёткое фото.";
+    }
+
     return new Response(
       JSON.stringify({ error: message }),
       {
-        status: 502,
+        status,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
